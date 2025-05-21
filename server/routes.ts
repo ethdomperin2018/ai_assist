@@ -145,14 +145,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Check auth middleware
-  const isAuthenticated = (req: Request, res: Response, next: Function) => {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.status(401).json({ message: "Not authenticated" });
-  };
-
   // Helper to send error for invalid data
   const validateData = (schema: z.ZodType<any>, data: any) => {
     const result = schema.safeParse(data);
