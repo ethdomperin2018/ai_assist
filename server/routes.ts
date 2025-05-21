@@ -15,6 +15,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Initialize all our services
   initializeServices(httpServer);
+
+  // Recommendation routes
+  app.get("/api/recommendations/steps", isAuthenticated, async (req, res) => {
+    try {
+      const { description } = req.query;
+      const user = req.user as any;
+      
+      if (!description || typeof description !== "string") {
+        return res.status(400).json({ message: "Request description is required" });
+      }
+      
+      const recommendations = await recommendationService.getRecommendedSteps(description, user.id);
+      res.json(recommendations);
+    } catch (error) {
+      res.status(500).json({ message: "Error getting recommendations", error: error.message });
+    }
+  });
+
+  app.get("/api/recommendations/resources/:requestId", isAuthenticated, async (req, res) => {
+    try {
+      const requestId = parseInt(req.params.requestId);
+      const recommendations = await recommendationService.getResourceRecommendations(requestId);
+      res.json(recommendations);
+    } catch (error) {
+      res.status(500).json({ message: "Error getting resource recommendations", error: error.message });
+    }
+  });
+
+  // Notification routes
+  app.get("/api/notifications", isAuthenticated, async (req, res) => {
+    try {
+      const user = req.user as any;
+      const notifications = await notificationService.getUserNotifications(user.id);
+      res.json(notifications);
+    } catch (error) {
+      res.status(500).json({ message: "Error getting notifications", error: error.message });
+    }
+  });
+
+  app.patch("/api/notifications/:id/read", isAuthenticated, async (req, res) => {
+    try {
+      const notification = await notificationService.markAsRead(req.params.id);
+      res.json(notification);
+    } catch (error) {
+      res.status(500).json({ message: "Error marking notification as read", error: error.message });
+    }
+  });
+
+  // Workspace routes
+  app.get("/api/workspace/:requestId/state", isAuthenticated, async (req, res) => {
+    try {
+      const requestId = parseInt(req.params.requestId);
+      const state = workspaceService.getWorkspaceState(requestId);
+      if (!state) {
+        return res.status(404).json({ message: "Workspace not found" });
+      }
+      res.json(state);
+    } catch (error) {
+      res.status(500).json({ message: "Error getting workspace state", error: error.message });
+    }
+  });
+
+  app.get("/api/workspaces/active", isAuthenticated, async (req, res) => {
+    try {
+      const user = req.user as any;
+      if (user.role !== "admin" && user.role !== "team_member") {
+        return res.status(403).json({ message: "Not authorized to view all workspaces" });
+      }
+      const workspaces = workspaceService.getAllActiveWorkspaces();
+      res.json(workspaces);
+    } catch (error) {
+      res.status(500).json({ message: "Error getting active workspaces", error: error.message });
+    }
+  });
   
   // Session setup
   const MemoryStoreSession = MemoryStore(session);
