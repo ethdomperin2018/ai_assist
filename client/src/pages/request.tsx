@@ -25,7 +25,9 @@ export default function Request() {
   const params = useParams();
   const [match, params2] = useRoute("/request/new");
   const [location, navigate] = useLocation();
-  const auth = useContext(AuthContext) as AuthContextType;
+  const auth = useContext(AuthContext);
+  // Provide default values if auth context is not available yet
+  const isAuthenticated = auth?.isAuthenticated || false;
   const { toast } = useToast();
   
   const isNewRequest = match || params.id === "new";
@@ -41,19 +43,19 @@ export default function Request() {
   // Fetch request if editing
   const { data: request, isLoading: isLoadingRequest } = useQuery({
     queryKey: [`/api/requests/${params.id}`],
-    enabled: !isNewRequest && auth.isAuthenticated,
+    enabled: !isNewRequest && isAuthenticated,
   });
   
   // Fetch messages if editing
   const { data: messages, isLoading: isLoadingMessages } = useQuery({
     queryKey: [`/api/requests/${params.id}/messages`],
-    enabled: !isNewRequest && auth.isAuthenticated,
+    enabled: !isNewRequest && isAuthenticated,
   });
   
   // Fetch steps if editing
   const { data: steps, isLoading: isLoadingSteps } = useQuery({
     queryKey: [`/api/requests/${params.id}/steps`],
-    enabled: !isNewRequest && auth.isAuthenticated,
+    enabled: !isNewRequest && isAuthenticated,
   });
   
   useEffect(() => {
