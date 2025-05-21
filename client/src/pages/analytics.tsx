@@ -27,11 +27,6 @@ export default function Analytics() {
   const { data: analyticsData, isLoading, error } = useQuery({
     queryKey: ["/api/analytics"],
     enabled: auth.isAuthenticated,
-    queryFn: async () => {
-      return await apiRequest("/api/analytics", {
-        method: "GET"
-      });
-    }
   });
 
   // Fetch all requests - we'll use this for displaying charts

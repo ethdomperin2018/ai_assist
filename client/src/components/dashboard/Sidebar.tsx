@@ -9,7 +9,8 @@ import {
   Settings, 
   CreditCard, 
   LogOut, 
-  User
+  User,
+  BarChart4
 } from "lucide-react";
 import { AuthContext, AuthContextType } from "../../App";
 import { useToast } from "@/hooks/use-toast";
@@ -37,6 +38,7 @@ export default function Sidebar() {
 
   const menuItems = [
     { icon: <LayoutDashboard className="h-5 w-5" />, title: "Dashboard", path: "/dashboard" },
+    { icon: <BarChart4 className="h-5 w-5" />, title: "Analytics", path: "/analytics" },
     { icon: <MessageSquare className="h-5 w-5" />, title: "Messages", path: "/messages" },
     { icon: <FileText className="h-5 w-5" />, title: "Contracts", path: "/contracts" },
     { icon: <Calendar className="h-5 w-5" />, title: "Meetings", path: "/meetings" },
