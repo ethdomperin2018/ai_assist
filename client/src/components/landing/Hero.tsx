@@ -37,11 +37,20 @@ export default function Hero() {
         </div>
       </div>
       <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 hidden lg:block">
-        <img 
-          className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" 
-          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&h=800" 
-          alt="Team collaboration in a modern office" 
-        />
+        <div className="relative h-full w-full">
+          {/* Gradient overlay for visual interest */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-primary-700/30 mix-blend-overlay z-10 rounded-l-3xl"></div>
+          
+          <img 
+            className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full rounded-l-3xl shadow-2xl" 
+            src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1600&h=900&q=80" 
+            alt="AI assistant working with human team" 
+          />
+          
+          {/* Modern decorative elements */}
+          <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-primary-500/20 rounded-full blur-xl"></div>
+          <div className="absolute top-10 right-10 w-16 h-16 bg-primary-300/30 rounded-full blur-lg"></div>
+        </div>
       </div>
     </div>
   );

@@ -7,12 +7,7 @@ import session from "express-session";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import MemoryStore from "memorystore";
-import OpenAI from "openai";
-
-// Initialize OpenAI
-const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || "demo-key" 
-});
+import { analyzeRequest, draftContract, generateAssistantResponse } from "./ai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -227,8 +222,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // AI assistance route
+  // AI Analysis routes
   app.post("/api/ai/analyze-request", isAuthenticated, async (req, res) => {
+    try {
+      const { requestDescription } = req.body;
+      if (!requestDescription) {
+        return res.status(400).json({ error: "Request description is required" });
+      }
+      
+      const analysis = await analyzeRequest(requestDescription);
+      return res.json(analysis);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error analyzing request:", errorMessage);
+      res.status(500).json({ error: "Failed to analyze request" });
+    }
+  });
+  
+  app.post("/api/ai/draft-contract", isAuthenticated, async (req, res) => {
+    try {
+      const { requestId, details } = req.body;
+      if (!requestId || !details) {
+        return res.status(400).json({ error: "Request ID and details are required" });
+      }
+      
+      const request = await storage.getRequest(parseInt(requestId));
+      if (!request) {
+        return res.status(404).json({ message: "Request not found" });
+      }
+      
+      const user = req.user as any;
+      if (user.role !== "admin" && user.role !== "team_member" && request.userId !== user.id) {
+        return res.status(403).json({ message: "Not authorized to generate contract for this request" });
+      }
+      
+      const contract = await draftContract(details);
+      return res.json(contract);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error drafting contract:", errorMessage);
+      res.status(500).json({ error: "Failed to draft contract" });
+    }
+  });
+  
+  // AI message assistance route
+  app.post("/api/ai/chat-response", isAuthenticated, async (req, res) => {
     try {
       const { requestDescription } = req.body;
       
