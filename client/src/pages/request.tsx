@@ -242,7 +242,7 @@ export default function Request() {
                   <FormLabel htmlFor="title">Title</FormLabel>
                   <Input
                     id="title"
-                    placeholder="Enter a title for your request"
+                    placeholder="E.g., Social Media Management, Research Project, Website Design"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="w-full"
@@ -252,9 +252,12 @@ export default function Request() {
                 
                 <div className="space-y-2">
                   <FormLabel htmlFor="description">Description</FormLabel>
+                  <p className="text-sm text-gray-500 mb-2">
+                    Be as detailed as possible. Include goals, timelines, and any specific requirements. Our AI will analyze your request and create a tailored plan.
+                  </p>
                   <Textarea
                     id="description"
-                    placeholder="Describe what you need help with in detail..."
+                    placeholder="E.g., I need help managing my company's social media accounts across Instagram, Twitter, and LinkedIn. I want to post 3 times per week on each platform, engage with followers, and grow my audience. I'm in the fitness industry..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="min-h-[200px] w-full"
@@ -262,22 +265,34 @@ export default function Request() {
                   />
                 </div>
                 
-                <Button
-                  type="button"
-                  onClick={handleAnalyzeRequest}
-                  disabled={isAnalyzing || !description.trim()}
-                  className="w-full"
-                  variant="outline"
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Analyzing...
-                    </>
-                  ) : (
-                    "Analyze Request with AI"
-                  )}
-                </Button>
+                <div className="space-y-2">
+                  <Button
+                    type="button"
+                    onClick={handleAnalyzeRequest}
+                    disabled={isAnalyzing || !description.trim() || description.length < 30}
+                    className="w-full"
+                    variant="outline"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        AI is analyzing your request...
+                      </>
+                    ) : (
+                      <>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                          <path d="M12 17h.01"></path>
+                        </svg>
+                        Analyze Request with AI
+                      </>
+                    )}
+                  </Button>
+                  <p className="text-xs text-center text-gray-500">
+                    Our AI will analyze your request and create a detailed plan with time estimates and cost range
+                  </p>
+                </div>
                 
                 {aiAnalysis && (
                   <Card className="mt-6 border-primary-200">
