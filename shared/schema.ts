@@ -31,6 +31,7 @@ export const requests = pgTable("requests", {
   aiPlan: jsonb("ai_plan"), // JSON array of steps with AI-generated plan
   costEstimate: integer("cost_estimate"), // Cost in cents
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
   completedAt: timestamp("completed_at"),
 });
 
@@ -47,11 +48,14 @@ export const insertRequestSchema = createInsertSchema(requests).pick({
 export const steps = pgTable("steps", {
   id: serial("id").primaryKey(),
   requestId: integer("request_id").notNull(),
+  title: text("title").notNull().default(""),
   description: text("description").notNull(),
   assignedTo: text("assigned_to").notNull(), // "ai" or userId
   status: text("status").notNull().default("pending"), // pending, in_progress, completed
   order: integer("order").notNull(),
+  estimatedHours: integer("estimated_hours"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
   completedAt: timestamp("completed_at"),
 });
 
@@ -89,6 +93,7 @@ export const meetings = pgTable("meetings", {
   topic: text("topic").notNull(),
   status: text("status").notNull().default("scheduled"), // scheduled, completed, cancelled
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const insertMeetingSchema = createInsertSchema(meetings).pick({
@@ -111,6 +116,7 @@ export const payments = pgTable("payments", {
   paymentMethod: text("payment_method"),
   transactionId: text("transaction_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const insertPaymentSchema = createInsertSchema(payments).pick({
@@ -129,7 +135,10 @@ export const contracts = pgTable("contracts", {
   userId: integer("user_id").notNull(),
   content: text("content").notNull(),
   status: text("status").notNull().default("draft"), // draft, sent, signed, cancelled
+  reviewedBy: integer("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
   signedAt: timestamp("signed_at"),
 });
 
