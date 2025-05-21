@@ -22,7 +22,9 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function Login() {
   const [location, navigate] = useLocation();
-  const auth = useContext(AuthContext) as AuthContextType;
+  const auth = useContext(AuthContext);
+  // Provide default values if auth context is not available yet
+  const isAuthenticated = auth?.isAuthenticated || false;
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   
@@ -33,10 +35,10 @@ export default function Login() {
   const redirectPath = params.get("redirect") || "/dashboard";
 
   useEffect(() => {
-    if (auth.isAuthenticated) {
+    if (isAuthenticated) {
       navigate(redirectPath);
     }
-  }, [auth.isAuthenticated, navigate, redirectPath]);
+  }, [isAuthenticated, navigate, redirectPath]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

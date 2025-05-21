@@ -59,10 +59,12 @@ export default function Request() {
   });
   
   useEffect(() => {
-    if (!auth.isLoading && !auth.isAuthenticated) {
+    // Check authentication status
+    const isLoading = auth?.isLoading || false;
+    if (!isLoading && !isAuthenticated) {
       navigate("/login?redirect=" + encodeURIComponent(location));
     }
-  }, [auth.isAuthenticated, auth.isLoading, navigate, location]);
+  }, [auth, isAuthenticated, navigate, location]);
   
   useEffect(() => {
     if (request) {
