@@ -1,0 +1,31 @@
+Additional Notes:
+- MVP’s primary focus is showcasing our privacy system, along with the company’s
+commitment to its mission of truly putting the individual first.
+- If a client wants human intervention for a service, our human assistance team needs to
+see the contract prior to them paying for it in order to make sure that it is doable, and in
+the timeframe and cost that was estimated. Revisions to contracts need to be possible.
+Therefore, the pAI should give an estimated range and timeframe for requests to the
+client. If they choose to move forward, we would quickly review the request report and
+give official costs and timeframe and then they can accept the contract.
+How Our Service Works: Clients will make support requests large or small in regard to
+practically anything to their personal AI (pAI). Each pAI acts as a liaison to our human
+assistance team who is there to guarantee client requests are fulfilled, whatever they may be,
+by finding contractors, freelancers, experts, etc capable of filling in the gaps that the pAI cannot
+complete. Human assistance is the paid component of our company, and the cost of this service
+will vary on the request made by the client. For this reason, the pAI makes approximations of
+the time and cost of each request. The estimate will be provided to the client in order for them to
+make an informed choice about purchasing the service. If the client decides to move forward
+with it, the pAI will compile a request report detailing the project, the client (non-identifiable), the
+cost, and the timeframe to our human assistance team.
+Future Outlook: The project’s long-term goal is to create a comprehensive assistance solution
+by providing a core personal AI serving in an administrative capacity to clients; a growing
+catalogue of ‘modules’ which integrate with the core AI to allow it to complete specialized
+functionalities; and a human support team that will take on any requests not currently
+completable by the pAI. Eventually, the core pAI will be capable of coordinating and translating
+information between modules, managing tasks, creating plans and schedules, and guiding
+users to fulfill their needs. A modular approach to specialized functionalities allows us to
+continuously innovate and scale the pAI’s capabilities, and allows our company to rely less and
+less on outsourced work as we grow. By providing a human support team to assist where the
+pAI cannot, our company will always embody our company mission to support individuals with
+all areas of help, by synergizing AI administrative assistance and guidance with human
+adaptability and intelligence.

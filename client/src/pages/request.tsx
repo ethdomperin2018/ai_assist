@@ -9,11 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { CalendarIcon, ClipboardCheck, MessageSquare, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import { CalendarIcon, ClipboardCheck, MessageSquare, FileText, ArrowLeft, Loader2, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ChatUI, Message } from "@/components/ui/chat-ui";
 import { ContractGenerator } from "@/components/ui/contract-generator";
+import { ReviewSystem } from "@/components/ui/review-system";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { analyzeRequest, draftContract, AiAnalysisResponse } from "@/lib/openai";
 import { AuthContext, AuthContextType } from "../App";
@@ -515,6 +516,10 @@ export default function Request() {
                 <TabsTrigger value="steps">
                   <ClipboardCheck className="h-4 w-4 mr-2" />
                   Steps
+                </TabsTrigger>
+                <TabsTrigger value="review">
+                  <Users className="h-4 w-4 mr-2" />
+                  Human Review
                 </TabsTrigger>
                 <TabsTrigger value="contracts">
                   <FileText className="h-4 w-4 mr-2" />
