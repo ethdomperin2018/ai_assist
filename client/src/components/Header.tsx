@@ -120,14 +120,13 @@ export default function Header() {
                         key={item.path} 
                         href={item.path}
                         onClick={() => setIsMenuOpen(false)}
-                      >
-                        <a className={`py-2 px-3 rounded-md ${
+                        className={`py-2 px-3 rounded-md ${
                           isActive(item.path) 
                             ? "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400" 
                             : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                        }`}>
-                          {item.title}
-                        </a>
+                        }`}
+                      >
+                        {item.title}
                       </Link>
                     ))}
                   </div>
