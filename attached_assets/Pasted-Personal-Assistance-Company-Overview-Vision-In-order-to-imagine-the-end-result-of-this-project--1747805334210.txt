@@ -1,0 +1,42 @@
+Personal Assistance Company
+Overview
+Vision: ‘In order to imagine the end result of this project, imagine a platform like Fiverr
+reorganized to be entirely under the umbrella of a personal assistant; where a client’s
+point-of-contact with our company (and service) is an administrative personal AI working
+cooperatively with a human support team. Our personal assistance service enables clients to
+request support for any task, and to do so in complete confidentiality. Unlike platforms such as
+Fiverr, which require clients to define solutions to problems they face and/or identify individuals
+to execute them, our service allows clients to simply ask for help, and our personal AI will
+work with the client to determine potential courses of action, as well as collaborate with
+our human team to implement a successful solution. This outcome will be fully guaranteed;
+should the resolution not meet expectations, a full refund will be provided.’
+Company Mission: To help and support people however we can, always putting the individual
+first. Our world is full of people and companies putting themselves first at the cost of others, and
+our mission is to be the counterpoint to that.
+
+MVP Requirements
+Goal: Build a prototype that showcases the concept, our key differentiators, is capable of
+producing revenue, and acts as a framework for us to expand upon.
+Requirements:
+
+Client-facing AI capable of:
+a. Natural language processing to interact with clients
+b. Taking requests for assistance from clients
+c. Advanced administrative reasoning to help plan potential solutions for a given
+request, differentiating between steps the AI can complete and ones that the user
+(or our team) can complete
+d. Providing the option and estimated cost of having our in-house team complete
+any of the ‘steps’ or the entirety of a request
+e. Supplementing plans/solutions with research in order to substantiate the
+credibility of its reasoning
+f. Performing basic LLM assistant tasks like writing, editing, brainstorming while
+maintaining our persona privacy framework
+g. Relaying request information to its counterpart that faces our in-house team (me)
+h. Scheduling meetings with our in-house team if needed
+i. Draft contracts
+j. Providing a secure way of accepting payment for services
+Internal-facing AI capable of:
+a. Keeping track of and organizing open projects/requests
+b. Relaying information, documents, completed projects, etc back to clients
+c. Scheduling meetings in open time slots with clients if needed
+Plz implement this with code.
