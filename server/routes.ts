@@ -10,6 +10,14 @@ import MemoryStore from "memorystore";
 import { analyzeRequest, draftContract, generateAssistantResponse } from "./ai";
 import { initializeServices, aiService, notificationService, workspaceService, recommendationService } from "./services";
 
+// Check auth middleware
+const isAuthenticated = (req: Request, res: Response, next: Function) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ message: "Not authenticated" });
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
 
