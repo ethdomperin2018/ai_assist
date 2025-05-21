@@ -177,12 +177,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Login after registration
       req.login(user, (err) => {
         if (err) {
+          console.error("Login error after registration:", err);
           return res.status(500).json({ message: "Error during login after registration" });
         }
         return res.json({ user: { ...user, password: undefined } });
       });
     } catch (error) {
-      res.status(500).json({ message: "Server error", error: error.message });
+      console.error("Registration error:", error);
+      res.status(500).json({ 
+        message: error.message || "There was a problem creating your account",
+        error: error.code || "REGISTRATION_FAILED"
+      });
     }
   });
 
