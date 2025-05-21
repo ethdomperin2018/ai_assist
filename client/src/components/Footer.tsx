@@ -28,23 +28,23 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-gray-300 tracking-wider uppercase">Services</h3>
             <ul className="mt-4 space-y-4">
               <li>
-                <Link href="/#services">
-                  <a className="text-base text-gray-400 hover:text-white">Administrative Support</a>
+                <Link href="/#services" className="text-base text-gray-400 hover:text-white">
+                  Administrative Support
                 </Link>
               </li>
               <li>
-                <Link href="/#services">
-                  <a className="text-base text-gray-400 hover:text-white">Research & Analysis</a>
+                <Link href="/#services" className="text-base text-gray-400 hover:text-white">
+                  Research & Analysis
                 </Link>
               </li>
               <li>
-                <Link href="/#services">
-                  <a className="text-base text-gray-400 hover:text-white">Content Creation</a>
+                <Link href="/#services" className="text-base text-gray-400 hover:text-white">
+                  Content Creation
                 </Link>
               </li>
               <li>
-                <Link href="/#services">
-                  <a className="text-base text-gray-400 hover:text-white">Project Management</a>
+                <Link href="/#services" className="text-base text-gray-400 hover:text-white">
+                  Project Management
                 </Link>
               </li>
             </ul>
@@ -54,23 +54,23 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-gray-300 tracking-wider uppercase">Company</h3>
             <ul className="mt-4 space-y-4">
               <li>
-                <Link href="/#about">
-                  <a className="text-base text-gray-400 hover:text-white">About Us</a>
+                <Link href="/#about" className="text-base text-gray-400 hover:text-white">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/#blog">
-                  <a className="text-base text-gray-400 hover:text-white">Blog</a>
+                <Link href="/#blog" className="text-base text-gray-400 hover:text-white">
+                  Blog
                 </Link>
               </li>
               <li>
-                <Link href="/#careers">
-                  <a className="text-base text-gray-400 hover:text-white">Careers</a>
+                <Link href="/#careers" className="text-base text-gray-400 hover:text-white">
+                  Careers
                 </Link>
               </li>
               <li>
-                <Link href="/#contact">
-                  <a className="text-base text-gray-400 hover:text-white">Contact</a>
+                <Link href="/#contact" className="text-base text-gray-400 hover:text-white">
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -80,23 +80,23 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-gray-300 tracking-wider uppercase">Legal</h3>
             <ul className="mt-4 space-y-4">
               <li>
-                <Link href="/privacy">
-                  <a className="text-base text-gray-400 hover:text-white">Privacy Policy</a>
+                <Link href="/privacy" className="text-base text-gray-400 hover:text-white">
+                  Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms">
-                  <a className="text-base text-gray-400 hover:text-white">Terms of Service</a>
+                <Link href="/terms" className="text-base text-gray-400 hover:text-white">
+                  Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/data-processing">
-                  <a className="text-base text-gray-400 hover:text-white">Data Processing</a>
+                <Link href="/data-processing" className="text-base text-gray-400 hover:text-white">
+                  Data Processing
                 </Link>
               </li>
               <li>
-                <Link href="/cookie-policy">
-                  <a className="text-base text-gray-400 hover:text-white">Cookie Policy</a>
+                <Link href="/cookie-policy" className="text-base text-gray-400 hover:text-white">
+                  Cookie Policy
                 </Link>
               </li>
             </ul>

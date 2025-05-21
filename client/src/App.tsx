@@ -35,13 +35,13 @@ export const AuthContext = React.createContext<AuthContextType | null>(null);
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Landing} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/request/:id" component={Request} />
-      <Route path="/request/new" component={Request} />
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route component={NotFound} />
+      <Route path="/dashboard"><Dashboard /></Route>
+      <Route path="/request/new"><Request /></Route>
+      <Route path="/request/:id"><Request /></Route>
+      <Route path="/login"><Login /></Route>
+      <Route path="/register"><Register /></Route>
+      <Route path="/" exact={true}><Landing /></Route>
+      <Route><NotFound /></Route>
     </Switch>
   );
 }
