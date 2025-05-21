@@ -13,6 +13,9 @@ import { initializeServices, aiService, notificationService, workspaceService, r
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   
+  // Initialize all our services
+  initializeServices(httpServer);
+  
   // Session setup
   const MemoryStoreSession = MemoryStore(session);
   app.use(session({
