@@ -352,24 +352,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Request description is required" });
       }
 
-      const response = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: "You are an AI assistant for a personal assistance service. Analyze the client request and break it down into actionable steps. For each step, determine whether it should be handled by AI or requires human expertise. Also provide a cost estimate range for the entire request. Return JSON with the following structure: { plan: [{ step: string, assignedTo: string, estimatedHours: number }], costEstimateRange: { min: number, max: number }, summary: string }"
-          },
-          {
-            role: "user",
-            content: requestDescription
-          }
-        ],
-        response_format: { type: "json_object" }
-      });
-
-      const aiResponseContent = response.choices[0].message.content || "{}";
-      const aiResponse = JSON.parse(aiResponseContent);
-      res.json(aiResponse);
+      const analysis = await analyzeRequest(requestDescription);
+      res.json(analysis);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       res.status(500).json({ message: "Error analyzing request", error: errorMessage });

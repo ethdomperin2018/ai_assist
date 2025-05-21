@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card } from './card';
 import { Button } from './button';
@@ -17,7 +16,7 @@ export function AiAssistant() {
 
     setConversation(prev => [...prev, { content: message, isAi: false }]);
     setIsLoading(true);
-    
+
     try {
       const response = await aiService.generateResponse([{ role: 'user', content: message }], '');
       setConversation(prev => [...prev, { content: response, isAi: true }]);

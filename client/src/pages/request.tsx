@@ -31,35 +31,36 @@ export default function Request() {
   // Provide default values if auth context is not available yet
   const isAuthenticated = auth?.isAuthenticated || false;
   const { toast } = useToast();
-  
+
   const isNewRequest = match || params.id === "new";
   useTitle(isNewRequest ? "New Request | Assist.ai" : "Request Details | Assist.ai");
-  
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [aiAnalysis, setAiAnalysis] = useState<AiAnalysisResponse | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [contractDetails, setContractDetails] = useState("");
   const [contractContent, setContractContent] = useState("");
-  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Fetch request if editing
   const { data: request, isLoading: isLoadingRequest } = useQuery({
     queryKey: [`/api/requests/${params.id}`],
     enabled: !isNewRequest && isAuthenticated,
   });
-  
+
   // Fetch messages if editing
   const { data: messages, isLoading: isLoadingMessages } = useQuery({
     queryKey: [`/api/requests/${params.id}/messages`],
     enabled: !isNewRequest && isAuthenticated,
   });
-  
+
   // Fetch steps if editing
   const { data: steps, isLoading: isLoadingSteps } = useQuery({
     queryKey: [`/api/requests/${params.id}/steps`],
     enabled: !isNewRequest && isAuthenticated,
   });
-  
+
   useEffect(() => {
     // Check authentication status
     const isLoading = auth?.isLoading || false;
@@ -67,7 +68,7 @@ export default function Request() {
       navigate("/login?redirect=" + encodeURIComponent(location));
     }
   }, [auth, isAuthenticated, navigate, location]);
-  
+
   useEffect(() => {
     if (request) {
       setTitle(request.title);
@@ -77,7 +78,7 @@ export default function Request() {
       }
     }
   }, [request]);
-  
+
   const createRequestMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", "/api/requests", {
@@ -104,7 +105,7 @@ export default function Request() {
       });
     }
   });
-  
+
   const draftContractMutation = useMutation({
     mutationFn: async () => {
       if (!params.id) throw new Error("Request ID is required");
@@ -136,10 +137,17 @@ export default function Request() {
       });
       return;
     }
-    
-    createRequestMutation.mutate();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      createRequestMutation.mutate();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-  
+
   const handleAnalyzeRequest = async () => {
     if (!description.trim()) {
       toast({
@@ -149,7 +157,7 @@ export default function Request() {
       });
       return;
     }
-    
+
     setIsAnalyzing(true);
     try {
       const analysis = await analyzeRequest(description);
@@ -168,7 +176,7 @@ export default function Request() {
       setIsAnalyzing(false);
     }
   };
-  
+
   const submitPaymentMutation = useMutation({
     mutationFn: async () => {
       const response = await apiRequest("POST", "/api/payments", {
@@ -194,11 +202,11 @@ export default function Request() {
       });
     }
   });
-  
+
   const handleSubmitPayment = () => {
     submitPaymentMutation.mutate();
   };
-  
+
   if (auth.isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -206,18 +214,18 @@ export default function Request() {
       </div>
     );
   }
-  
+
   if (!auth.isAuthenticated) {
     return null; // Will redirect in the useEffect hook
   }
-  
+
   const statusColor = {
     pending: "bg-yellow-100 text-yellow-800",
     in_progress: "bg-blue-100 text-blue-800",
     completed: "bg-green-100 text-green-800",
     cancelled: "bg-red-100 text-red-800",
   };
-  
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
@@ -229,7 +237,7 @@ export default function Request() {
         >
           <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
         </Button>
-        
+
         {isNewRequest ? (
           <Card>
             <CardHeader>
@@ -251,7 +259,7 @@ export default function Request() {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <FormLabel htmlFor="description">Description</FormLabel>
                   <p className="text-sm text-gray-500 mb-2">
@@ -266,7 +274,7 @@ export default function Request() {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Button
                     type="button"
@@ -295,7 +303,7 @@ export default function Request() {
                     Our AI will analyze your request and create a detailed plan with time estimates and cost range
                   </p>
                 </div>
-                
+
                 {aiAnalysis && (
                   <Card className="mt-6 border-primary-200">
                     <CardHeader className="bg-primary-50 text-primary-900">
@@ -317,7 +325,7 @@ export default function Request() {
                             <p className="text-gray-700">{aiAnalysis.summary}</p>
                           </div>
                         </div>
-                        
+
                         <div>
                           <h4 className="font-medium mb-2 text-primary-700 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
@@ -361,7 +369,7 @@ export default function Request() {
                             </ul>
                           </div>
                         </div>
-                        
+
                         <div>
                           <h4 className="font-medium mb-2 text-primary-700 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
@@ -395,9 +403,9 @@ export default function Request() {
               <Button
                 type="submit"
                 onClick={handleSubmit}
-                disabled={createRequestMutation.isPending || !title.trim() || !description.trim()}
+                disabled={createRequestMutation.isPending || !title.trim() || !description.trim() || isSubmitting}
               >
-                {createRequestMutation.isPending ? (
+                {createRequestMutation.isPending || isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Creating...
@@ -446,13 +454,13 @@ export default function Request() {
                     <h3 className="text-lg font-medium mb-2">Description</h3>
                     <p className="text-gray-700 whitespace-pre-line">{request.description}</p>
                   </div>
-                  
+
                   {request.aiPlan && (
                     <div>
                       <h3 className="text-lg font-medium mb-2">AI-Generated Plan</h3>
                       <div className="bg-gray-50 p-4 rounded-lg border">
                         <p className="text-gray-700 mb-4">{request.aiPlan.summary}</p>
-                        
+
                         <h4 className="font-medium mb-2">Steps</h4>
                         <ul className="space-y-2">
                           {request.aiPlan.plan.map((step, index) => (
@@ -474,14 +482,14 @@ export default function Request() {
                             </li>
                           ))}
                         </ul>
-                        
+
                         <div className="mt-4">
                           <h4 className="font-medium mb-2">Estimated Cost</h4>
                           <div className="flex space-x-2">
                             <p className="text-gray-700">
                               ${request.aiPlan.costEstimateRange.min / 100} - ${request.aiPlan.costEstimateRange.max / 100}
                             </p>
-                            
+
                             {request.status === "pending" && (
                               <Button 
                                 onClick={handleSubmitPayment}
@@ -506,7 +514,7 @@ export default function Request() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Tabs defaultValue="messages">
               <TabsList>
                 <TabsTrigger value="messages">
@@ -530,7 +538,7 @@ export default function Request() {
                   Meetings
                 </TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="messages" className="mt-6">
                 {isLoadingMessages ? (
                   <div className="flex items-center justify-center py-10">
@@ -547,7 +555,7 @@ export default function Request() {
                   />
                 )}
               </TabsContent>
-              
+
               <TabsContent value="steps" className="mt-6">
                 {isLoadingSteps ? (
                   <div className="flex items-center justify-center py-10">
@@ -606,7 +614,7 @@ export default function Request() {
                   </Card>
                 )}
               </TabsContent>
-              
+
               <TabsContent value="contracts" className="mt-6">
                 {/* Using our new ContractGenerator component */}
                 {request && (
@@ -619,7 +627,7 @@ export default function Request() {
                   </div>
                 )}
               </TabsContent>
-              
+
               <TabsContent value="meetings" className="mt-6">
                 <Card>
                   <CardHeader>
@@ -646,7 +654,7 @@ export default function Request() {
                             </FormItem>
                           )}
                         />
-                        
+
                         <div className="grid grid-cols-2 gap-4">
                           <FormField
                             name="date"
@@ -660,7 +668,7 @@ export default function Request() {
                               </FormItem>
                             )}
                           />
-                          
+
                           <FormField
                             name="time"
                             render={({ field }) => (
@@ -674,7 +682,7 @@ export default function Request() {
                             )}
                           />
                         </div>
-                        
+
                         <FormField
                           name="duration"
                           render={({ field }) => (
@@ -687,7 +695,7 @@ export default function Request() {
                             </FormItem>
                           )}
                         />
-                        
+
                         <Button className="w-full">
                           Schedule Meeting
                         </Button>
