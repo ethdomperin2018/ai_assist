@@ -13,6 +13,7 @@ import { CalendarIcon, ClipboardCheck, MessageSquare, FileText, ArrowLeft, Loade
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ChatUI, Message } from "@/components/ui/chat-ui";
+import { ContractGenerator } from "@/components/ui/contract-generator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { analyzeRequest, draftContract, AiAnalysisResponse } from "@/lib/openai";
 import { AuthContext, AuthContextType } from "../App";
@@ -602,64 +603,16 @@ export default function Request() {
               </TabsContent>
               
               <TabsContent value="contracts" className="mt-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Contract Generation</CardTitle>
-                    <CardDescription>
-                      Our AI can draft a contract based on your request details
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      {contractContent ? (
-                        <div className="bg-gray-50 p-6 rounded-lg border">
-                          <h3 className="text-lg font-medium mb-4">Draft Contract</h3>
-                          <ScrollArea className="h-[400px] pr-4">
-                            <div className="whitespace-pre-line text-gray-700">
-                              {contractContent}
-                            </div>
-                          </ScrollArea>
-                          <div className="mt-6 flex justify-end space-x-4">
-                            <Button 
-                              variant="outline"
-                              onClick={() => setContractContent("")}
-                            >
-                              Edit Details
-                            </Button>
-                            <Button>
-                              Save Contract
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          <FormLabel htmlFor="contractDetails">Additional Contract Details</FormLabel>
-                          <Textarea
-                            id="contractDetails"
-                            value={contractDetails}
-                            onChange={(e) => setContractDetails(e.target.value)}
-                            placeholder="Provide any specific terms, conditions, or details you want included in the contract..."
-                            className="min-h-[150px]"
-                          />
-                          <Button
-                            onClick={() => draftContractMutation.mutate()}
-                            disabled={draftContractMutation.isPending || !contractDetails.trim()}
-                            className="w-full"
-                          >
-                            {draftContractMutation.isPending ? (
-                              <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Drafting Contract...
-                              </>
-                            ) : (
-                              "Draft Contract with AI"
-                            )}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
+                {/* Using our new ContractGenerator component */}
+                {request && (
+                  <div className="max-w-4xl mx-auto">
+                    <ContractGenerator
+                      requestId={parseInt(params.id)}
+                      requestTitle={request.title}
+                      requestDescription={request.description}
+                    />
+                  </div>
+                )}
               </TabsContent>
               
               <TabsContent value="meetings" className="mt-6">
