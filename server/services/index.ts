@@ -16,9 +16,13 @@ import { recommendationService } from './recommendation-service';
  */
 export function initializeServices(server: Server): void {
   // Initialize the collaborative workspace service with WebSocket server
-  workspaceService.initialize(server);
-  
-  console.log('All services initialized successfully');
+  try {
+    workspaceService.initialize(server);
+    console.log('All services initialized successfully');
+  } catch (error) {
+    console.error('Failed to initialize workspace service:', error);
+    // Continue running even if WebSocket fails
+  }
 }
 
 // Export all services
