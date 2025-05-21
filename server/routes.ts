@@ -8,6 +8,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import MemoryStore from "memorystore";
 import { analyzeRequest, draftContract, generateAssistantResponse } from "./ai";
+import { initializeServices, aiService, notificationService, workspaceService, recommendationService } from "./services";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
