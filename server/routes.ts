@@ -236,44 +236,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Request description is required" });
       }
       
-      // Sample response for development until OpenAI API key is configured
-      const sampleResponse = {
-        plan: [
+      // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
           {
-            step: "Initial consultation and requirements gathering",
-            assignedTo: "human",
-            estimatedHours: 1
+            role: "system",
+            content: "You are an AI assistant for a personal assistance service. Analyze the client request and break it down into actionable steps. For each step, determine whether it should be handled by AI or requires human expertise. Also provide a cost estimate range for the entire request. Return JSON with the following structure: { plan: [{ step: string, assignedTo: string, estimatedHours: number }], costEstimateRange: { min: number, max: number }, summary: string }"
           },
           {
-            step: "Research available solutions",
-            assignedTo: "ai",
-            estimatedHours: 2
-          },
-          {
-            step: "Draft implementation plan",
-            assignedTo: "ai",
-            estimatedHours: 1
-          },
-          {
-            step: "Review and refinement of plan",
-            assignedTo: "human",
-            estimatedHours: 1
-          },
-          {
-            step: "Implementation and execution",
-            assignedTo: "human",
-            estimatedHours: 4
+            role: "user",
+            content: requestDescription
           }
         ],
-        costEstimateRange: {
-          min: 250,
-          max: 500
-        },
-        summary: "Your request will be handled by our team with both AI-powered research and human expertise to ensure the best possible outcome."
-      };
+        response_format: { type: "json_object" }
+      });
       
-      // Once OpenAI API key is properly configured, we can use the actual API
-      res.json(sampleResponse);
+      const aiResponseContent = response.choices[0].message.content || "{}";
+      const aiResponse = JSON.parse(aiResponseContent);
+      res.json(aiResponse);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       res.status(500).json({ message: "Error analyzing request", error: errorMessage });
