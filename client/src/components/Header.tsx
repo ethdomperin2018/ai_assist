@@ -10,7 +10,9 @@ import { MoonIcon, SunIcon } from "lucide-react";
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
-  const auth = useContext(AuthContext) as AuthContextType;
+  const auth = useContext(AuthContext);
+  // Provide default values if auth context is not available yet
+  const isAuthenticated = auth?.isAuthenticated || false;
   const { theme, setTheme } = useTheme();
   
   const isActive = (path: string) => location === path;
@@ -38,14 +40,16 @@ export default function Header() {
             </div>
             <nav className="hidden md:ml-10 md:flex md:space-x-8">
               {menuItems.map((item) => (
-                <Link key={item.path} href={item.path}>
-                  <a className={`font-medium transition-colors duration-200 ${
+                <Link 
+                  key={item.path} 
+                  href={item.path}
+                  className={`font-medium transition-colors duration-200 ${
                     isActive(item.path) 
                       ? "text-gray-900 dark:text-white" 
                       : "text-gray-500 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400"
-                  }`}>
-                    {item.title}
-                  </a>
+                  }`}
+                >
+                  {item.title}
                 </Link>
               ))}
             </nav>
@@ -65,7 +69,7 @@ export default function Header() {
               <span className="sr-only">Toggle theme</span>
             </Button>
           
-            {auth.isAuthenticated ? (
+            {isAuthenticated ? (
               <Link href="/dashboard">
                 <Button variant="outline" className="hidden md:block">
                   Dashboard
@@ -73,10 +77,8 @@ export default function Header() {
               </Link>
             ) : (
               <>
-                <Link href="/login">
-                  <a className="text-gray-500 dark:text-gray-400 font-medium hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200 hidden md:block">
-                    Log In
-                  </a>
+                <Link href="/login" className="text-gray-500 dark:text-gray-400 font-medium hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200 hidden md:block">
+                  Log In
                 </Link>
                 <Link href="/register">
                   <Button className="hidden md:block">
@@ -131,7 +133,7 @@ export default function Header() {
                   </div>
                   
                   <div className="mt-6 space-y-3">
-                    {auth.isAuthenticated ? (
+                    {isAuthenticated ? (
                       <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
                         <Button className="w-full">
                           Dashboard
