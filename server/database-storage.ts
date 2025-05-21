@@ -60,14 +60,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createRequest(request: InsertRequest): Promise<Request> {
-    const [createdRequest] = await db.insert(requests).values(request).returning();
+    const [createdRequest] = await db.insert(requests).values({
+      ...request,
+      updatedAt: new Date()
+    }).returning();
     return createdRequest;
   }
 
   async updateRequest(id: number, updates: Partial<Request>): Promise<Request | undefined> {
     const [updatedRequest] = await db
       .update(requests)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({
+        ...updates,
+        updatedAt: new Date()
+      })
       .where(eq(requests.id, id))
       .returning();
     
@@ -85,18 +91,25 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(steps)
       .where(eq(steps.requestId, requestId))
-      .orderBy(steps.id);
+      .orderBy(steps.order);
   }
 
   async createStep(step: InsertStep): Promise<Step> {
-    const [createdStep] = await db.insert(steps).values(step).returning();
+    const [createdStep] = await db.insert(steps).values({
+      ...step,
+      title: step.title || "",
+      updatedAt: new Date()
+    }).returning();
     return createdStep;
   }
 
   async updateStep(id: number, updates: Partial<Step>): Promise<Step | undefined> {
     const [updatedStep] = await db
       .update(steps)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({
+        ...updates,
+        updatedAt: new Date()
+      })
       .where(eq(steps.id, id))
       .returning();
     
@@ -133,7 +146,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(meetings)
       .where(eq(meetings.userId, userId))
-      .orderBy(desc(meetings.scheduledTime));
+      .orderBy(desc(meetings.scheduledFor));
   }
 
   async getMeetingsByRequestId(requestId: number): Promise<Meeting[]> {
@@ -141,18 +154,24 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(meetings)
       .where(eq(meetings.requestId, requestId))
-      .orderBy(desc(meetings.scheduledTime));
+      .orderBy(desc(meetings.scheduledFor));
   }
 
   async createMeeting(meeting: InsertMeeting): Promise<Meeting> {
-    const [createdMeeting] = await db.insert(meetings).values(meeting).returning();
+    const [createdMeeting] = await db.insert(meetings).values({
+      ...meeting,
+      updatedAt: new Date()
+    }).returning();
     return createdMeeting;
   }
 
   async updateMeeting(id: number, updates: Partial<Meeting>): Promise<Meeting | undefined> {
     const [updatedMeeting] = await db
       .update(meetings)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({
+        ...updates,
+        updatedAt: new Date()
+      })
       .where(eq(meetings.id, id))
       .returning();
     
@@ -182,14 +201,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createPayment(payment: InsertPayment): Promise<Payment> {
-    const [createdPayment] = await db.insert(payments).values(payment).returning();
+    const [createdPayment] = await db.insert(payments).values({
+      ...payment,
+      updatedAt: new Date()
+    }).returning();
     return createdPayment;
   }
 
   async updatePayment(id: number, updates: Partial<Payment>): Promise<Payment | undefined> {
     const [updatedPayment] = await db
       .update(payments)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({
+        ...updates,
+        updatedAt: new Date()
+      })
       .where(eq(payments.id, id))
       .returning();
     
@@ -220,14 +245,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createContract(contract: InsertContract): Promise<Contract> {
-    const [createdContract] = await db.insert(contracts).values(contract).returning();
+    const [createdContract] = await db.insert(contracts).values({
+      ...contract,
+      updatedAt: new Date()
+    }).returning();
     return createdContract;
   }
 
   async updateContract(id: number, updates: Partial<Contract>): Promise<Contract | undefined> {
     const [updatedContract] = await db
       .update(contracts)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({
+        ...updates,
+        updatedAt: new Date()
+      })
       .where(eq(contracts.id, id))
       .returning();
     

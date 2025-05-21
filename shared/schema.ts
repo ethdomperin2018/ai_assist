@@ -61,10 +61,12 @@ export const steps = pgTable("steps", {
 
 export const insertStepSchema = createInsertSchema(steps).pick({
   requestId: true,
+  title: true,
   description: true,
   assignedTo: true,
   status: true,
   order: true,
+  estimatedHours: true,
 });
 
 // Messages for chat between user and AI/team
@@ -147,6 +149,8 @@ export const insertContractSchema = createInsertSchema(contracts).pick({
   userId: true,
   content: true,
   status: true,
+  reviewedBy: true,
+  reviewedAt: true,
 });
 
 // Export types
