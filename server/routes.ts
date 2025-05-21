@@ -11,7 +11,7 @@ import OpenAI from "openai";
 
 // Initialize OpenAI
 const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || "sk-demo-key" 
+  apiKey: process.env.OPENAI_API_KEY || "demo-key" 
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -236,25 +236,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Request description is required" });
       }
       
-      // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages: [
+      // Sample response for development until OpenAI API key is configured
+      const sampleResponse = {
+        plan: [
           {
-            role: "system",
-            content: "You are an AI assistant for a personal assistance service. Analyze the client request and break it down into actionable steps. For each step, determine whether it should be handled by AI or requires human expertise. Also provide a cost estimate range for the entire request. Return JSON with the following structure: { plan: [{ step: string, assignedTo: string, estimatedHours: number }], costEstimateRange: { min: number, max: number }, summary: string }"
+            step: "Initial consultation and requirements gathering",
+            assignedTo: "human",
+            estimatedHours: 1
           },
           {
-            role: "user",
-            content: requestDescription
+            step: "Research available solutions",
+            assignedTo: "ai",
+            estimatedHours: 2
+          },
+          {
+            step: "Draft implementation plan",
+            assignedTo: "ai",
+            estimatedHours: 1
+          },
+          {
+            step: "Review and refinement of plan",
+            assignedTo: "human",
+            estimatedHours: 1
+          },
+          {
+            step: "Implementation and execution",
+            assignedTo: "human",
+            estimatedHours: 4
           }
         ],
-        response_format: { type: "json_object" }
-      });
+        costEstimateRange: {
+          min: 250,
+          max: 500
+        },
+        summary: "Your request will be handled by our team with both AI-powered research and human expertise to ensure the best possible outcome."
+      };
       
-      const aiResponseContent = response.choices[0].message.content || "{}";
-      const aiResponse = JSON.parse(aiResponseContent);
-      res.json(aiResponse);
+      // Once OpenAI API key is properly configured, we can use the actual API
+      res.json(sampleResponse);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       res.status(500).json({ message: "Error analyzing request", error: errorMessage });
@@ -384,21 +403,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
             content: msg.content
           }));
           
-          const aiResponse = await openai.chat.completions.create({
-            model: "gpt-4o",
-            messages: [
-              {
-                role: "system",
-                content: "You are an AI personal assistant helping with a request. Be helpful, professional, and courteous. If the user asks for something complex, suggest breaking it down into steps and offer to have the human team assist with specific parts."
-              },
-              ...conversationHistory
-            ]
-          });
+          // Generate simple AI response without OpenAI until API key is properly configured
+          let responseContent = "Thank you for your message. I'm here to help with your request. Our team will review it and get back to you shortly. Is there anything specific you need assistance with?";
+          
+          // When OpenAI API key is configured properly, we'll use the OpenAI API
+          // For now, we're using a simple response
           
           const aiMessage = await storage.createMessage({
             requestId: req.body.requestId,
             senderId: "ai",
-            content: aiResponse.choices[0].message.content || "I'm sorry, I couldn't generate a response."
+            content: responseContent
           });
           
           return res.status(201).json({ userMessage: message, aiResponse: aiMessage });
