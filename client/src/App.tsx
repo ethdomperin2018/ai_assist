@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Dashboard from "@/pages/dashboard";
+import Analytics from "@/pages/analytics";
 import Request from "@/pages/request";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
@@ -36,11 +37,12 @@ function Router() {
   return (
     <Switch>
       <Route path="/dashboard"><Dashboard /></Route>
+      <Route path="/analytics"><Analytics /></Route>
       <Route path="/request/new"><Request /></Route>
       <Route path="/request/:id"><Request /></Route>
       <Route path="/login"><Login /></Route>
       <Route path="/register"><Register /></Route>
-      <Route path="/" exact={true}><Landing /></Route>
+      <Route path="/"><Landing /></Route>
       <Route><NotFound /></Route>
     </Switch>
   );
