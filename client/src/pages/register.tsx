@@ -28,17 +28,19 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function Register() {
   const [location, navigate] = useLocation();
-  const auth = useContext(AuthContext) as AuthContextType;
+  const auth = useContext(AuthContext);
+  // If auth context isn't available yet, provide default values
+  const isAuthenticated = auth?.isAuthenticated || false;
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   
   useTitle("Register | Assist.ai");
 
   useEffect(() => {
-    if (auth.isAuthenticated) {
+    if (isAuthenticated) {
       navigate("/dashboard");
     }
-  }, [auth.isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -55,6 +57,11 @@ export default function Register() {
     setIsLoading(true);
     try {
       const { confirmPassword, ...userData } = values;
+      
+      if (!auth) {
+        throw new Error("Authentication context is not available");
+      }
+      
       await auth.register(userData);
       toast({
         title: "Registration Successful",
@@ -73,7 +80,7 @@ export default function Register() {
     }
   };
 
-  if (auth.isAuthenticated) {
+  if (isAuthenticated) {
     return null; // Will redirect in the useEffect
   }
 
