@@ -11,9 +11,9 @@ export async function analyzeRequest(requestDescription: string) {
     const prompt = `
     You are an expert personal assistant tasked with analyzing client requests and creating actionable plans. 
     Please analyze the following request and create a detailed plan:
-    
+
     Request: "${requestDescription}"
-    
+
     Create a JSON response with the following structure:
     - plan: An array of steps with fields:
       * step: A description of what needs to be done
@@ -24,7 +24,7 @@ export async function analyzeRequest(requestDescription: string) {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: [
         { role: "system", content: "You are a professional project planner with expertise in various domains." } as const,
         { role: "user", content: prompt } as const
@@ -36,7 +36,7 @@ export async function analyzeRequest(requestDescription: string) {
     if (!content) {
       throw new Error("No content returned from OpenAI");
     }
-    
+
     return JSON.parse(content);
 
   } catch (error) {
@@ -50,9 +50,9 @@ export async function draftContract(requestDetails: string) {
   try {
     const prompt = `
     Create a professional service contract based on the following project details:
-    
+
     "${requestDetails}"
-    
+
     The contract should include:
     1. Scope of work
     2. Timeline
@@ -62,7 +62,7 @@ export async function draftContract(requestDetails: string) {
     `;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: [
         { role: "system", content: "You are a professional contract drafter with legal expertise." },
         { role: "user", content: prompt }
@@ -83,10 +83,10 @@ export async function generateAssistantResponse(conversation: any[], context: st
     const prompt = `
     You are a helpful personal assistant at a company handling a client's request.
     Here's the context of their request: "${context}"
-    
+
     Please respond to the latest message in a helpful, professional manner.
     `;
-    
+
     // Type-safe message formatting for OpenAI
     const messages = [
       { role: "system" as const, content: prompt },
@@ -97,7 +97,7 @@ export async function generateAssistantResponse(conversation: any[], context: st
     ];
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4",
       messages: messages,
     });
 
