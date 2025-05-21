@@ -13,6 +13,7 @@ import Request from "@/pages/request";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
 import { apiRequest } from "@/lib/queryClient";
+import { AiAssistant } from './components/ui/ai-assistant';
 
 interface User {
   id: number;
@@ -60,7 +61,7 @@ function App() {
         const res = await fetch("/api/auth/me", {
           credentials: "include",
         });
-        
+
         if (res.ok) {
           const data = await res.json();
           setIsAuthenticated(data.authenticated);
@@ -77,7 +78,7 @@ function App() {
         setIsLoading(false);
       }
     };
-    
+
     checkAuth();
   }, []);
 
