@@ -42,42 +42,60 @@ export default function RequestCard({ request }: RequestCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden hover:shadow-md transition-all hover:translate-y-[-2px] border-t-4" 
+          style={{ borderTopColor: request.status === 'completed' ? '#10b981' : 
+                                   request.status === 'in_progress' ? '#3b82f6' : 
+                                   request.status === 'pending' ? '#f59e0b' : '#ef4444' }}>
       <CardContent className="p-0">
         <div className="p-6">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="font-medium text-lg text-gray-900 dark:text-gray-100">
+          <div className="flex justify-between items-start mb-3">
+            <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
               {truncateText(request.title, 30)}
             </h3>
             {getStatusBadge(request.status)}
           </div>
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-            {truncateText(request.description, 100)}
+          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+            {truncateText(request.description, 120)}
           </p>
-          <div className="flex items-center text-gray-500 dark:text-gray-400 text-xs">
-            <Calendar className="h-3 w-3 mr-1" />
-            <span>
-              Created {formatDistanceToNow(new Date(request.createdAt), { addSuffix: true })}
-            </span>
-          </div>
-          {request.aiPlan && (
-            <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
-              <div className="flex items-center">
-                <MessageSquare className="h-3 w-3 mr-1" />
-                <span>{request.aiPlan.plan.length} steps planned</span>
-              </div>
-              <div className="mt-1">
-                Est. Cost: ${request.aiPlan.costEstimateRange.min / 100} - ${request.aiPlan.costEstimateRange.max / 100}
-              </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-center text-gray-500 dark:text-gray-400 text-xs">
+              <Calendar className="h-3 w-3 mr-1 flex-shrink-0" />
+              <span>
+                Created {formatDistanceToNow(new Date(request.createdAt), { addSuffix: true })}
+              </span>
             </div>
-          )}
+            
+            {request.aiPlan && (
+              <div className="flex flex-col space-y-2 border-t border-gray-100 dark:border-gray-800 pt-3">
+                <div className="flex justify-between text-xs">
+                  <div className="flex items-center text-gray-500 dark:text-gray-400">
+                    <MessageSquare className="h-3 w-3 mr-1 flex-shrink-0" />
+                    <span>{request.aiPlan.plan.length} steps planned</span>
+                  </div>
+                  <div className="font-medium text-primary-600 dark:text-primary-400">
+                    ${request.aiPlan.costEstimateRange.min} - ${request.aiPlan.costEstimateRange.max}
+                  </div>
+                </div>
+                
+                <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
+                  <div 
+                    className="bg-primary-600 h-1.5 rounded-full" 
+                    style={{ width: request.status === 'completed' ? '100%' : 
+                                    request.status === 'in_progress' ? '50%' : '0%' }}>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </CardContent>
+      
       <CardFooter className="bg-gray-50 dark:bg-gray-800/50 p-4 border-t border-gray-100 dark:border-gray-800">
         <Link href={`/request/${request.id}`} className="w-full">
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full group">
             View Details
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
           </Button>
         </Link>
       </CardFooter>
