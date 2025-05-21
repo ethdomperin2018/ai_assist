@@ -51,6 +51,10 @@ export default function Login() {
   const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
     try {
+      if (!auth) {
+        throw new Error("Authentication system is not available");
+      }
+      
       await auth.login(values.username, values.password);
       toast({
         title: "Login Successful",
@@ -69,7 +73,7 @@ export default function Login() {
     }
   };
 
-  if (auth.isAuthenticated) {
+  if (isAuthenticated) {
     return null; // Will redirect in the useEffect
   }
 

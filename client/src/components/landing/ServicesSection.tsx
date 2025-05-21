@@ -72,10 +72,8 @@ export default function ServicesSection() {
                 <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{service.title}</h3>
                 <p className="mt-2 text-gray-600 dark:text-gray-400">{service.description}</p>
                 <div className="mt-4">
-                  <Link href={service.link}>
-                    <a className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
-                      Learn more &rarr;
-                    </a>
+                  <Link href={service.link} className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
+                    Learn more &rarr;
                   </Link>
                 </div>
               </div>
