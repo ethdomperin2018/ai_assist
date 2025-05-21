@@ -26,8 +26,8 @@ export async function analyzeRequest(requestDescription: string) {
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
-        { role: "system", content: "You are a professional project planner with expertise in various domains." },
-        { role: "user", content: prompt }
+        { role: "system", content: "You are a professional project planner with expertise in various domains." } as const,
+        { role: "user", content: prompt } as const
       ],
       response_format: { type: "json_object" }
     });
@@ -87,10 +87,11 @@ export async function generateAssistantResponse(conversation: any[], context: st
     Please respond to the latest message in a helpful, professional manner.
     `;
     
+    // Type-safe message formatting for OpenAI
     const messages = [
-      { role: "system", content: prompt },
+      { role: "system" as const, content: prompt },
       ...conversation.map(msg => ({
-        role: msg.senderId === "assistant" ? "assistant" : "user",
+        role: (msg.senderId === "assistant" ? "assistant" : "user") as const,
         content: msg.content
       }))
     ];
